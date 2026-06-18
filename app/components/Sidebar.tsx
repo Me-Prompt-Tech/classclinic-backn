@@ -1,6 +1,6 @@
-import { Activity, Calendar, Layers, Sparkles, Toolbox, Users } from 'lucide-react';
+import { Activity, Calendar, Layers, Sparkles, Toolbox, Users, UserCog } from 'lucide-react';
 
-type Tab = 'overview' | 'patients' | 'appointments' | 'about' | 'service';
+export type Tab = 'overview' | 'patients' | 'appointments' | 'about' | 'service' | 'admin' | 'loginConfig';
 
 interface SidebarProps {
   activeTab: Tab;
@@ -85,6 +85,18 @@ export default function Sidebar({ activeTab, onTabChange }: SidebarProps) {
           >
             <Toolbox className="w-4 h-4" />
             Service
+          </button>
+
+          <button
+            onClick={() => onTabChange('admin')}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+              activeTab === 'admin'
+                ? 'bg-gradient-to-r from-rose-500 to-rose-400 text-white shadow-md shadow-rose-200'
+                : 'text-slate-600 hover:bg-rose-50 hover:text-rose-600'
+            }`}
+          >
+            <UserCog className="w-4 h-4" />
+            Admin Profile
           </button>
         </nav>
       </div>

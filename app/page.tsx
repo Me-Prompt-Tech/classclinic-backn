@@ -1,10 +1,12 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import Sidebar from '@/app/components/Sidebar';
+import Sidebar, { Tab } from '@/app/components/Sidebar';
 import PatientsTab from '@/app/components/PatientsTab';
 import AboutTab from '@/app/components/AboutTab';
 import ServiceTab from '@/app/components/ServiceTab';
+import AdminTab from '@/app/components/AdminTab';
+import LoginConfigTab from '@/app/components/LoginConfigTab';
 import type { Stats, Patient, Appointment, PatientForm } from '@/app/types/dashboard';
 import {
   DollarSign,
@@ -17,12 +19,13 @@ import {
   ChevronRight,
   AlertCircle,
   PlusCircle,
+  Settings,
 } from 'lucide-react';
 
 
 export default function Home() {
-  // Tabs: 'overview' | 'patients' | 'appointments'
-  const [activeTab, setActiveTab] = useState<'overview' | 'patients' | 'appointments'>('overview');
+  // Tabs state
+  const [activeTab, setActiveTab] = useState<Tab>('overview');
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
   const [message, setMessage] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
@@ -256,14 +259,14 @@ export default function Home() {
 
   // Filter lists based on query
   const filteredPatients = patients.filter(
-    (p) =>
+    (p:any) =>
       `${p.firstName} ${p.lastName}`.toLowerCase().includes(searchQuery.toLowerCase()) ||
       p.hn.toLowerCase().includes(searchQuery.toLowerCase()) ||
       p.phone.includes(searchQuery)
   );
 
   const filteredAppointments = appointments.filter(
-    (a) =>
+    (a:any) =>
       `${a.patient?.firstName} ${a.patient?.lastName}`.toLowerCase().includes(searchQuery.toLowerCase()) ||
       a.doctorName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       a.patient?.hn.toLowerCase().includes(searchQuery.toLowerCase())
@@ -286,7 +289,7 @@ export default function Home() {
       )}
 
       {/* Sidebar navigation */}
-      <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
+      <Sidebar  activeTab={activeTab} onTabChange={setActiveTab} />
 
       {/* Main Container */}
       <main className="flex-1 flex flex-col min-w-0 bg-slate-50">
@@ -306,6 +309,16 @@ export default function Home() {
           </div>
 
           <div className="flex items-center gap-4">
+            {/* Login Config Action */}
+            <button
+              onClick={() => setActiveTab('loginConfig')}
+              className="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold bg-amber-50 hover:bg-amber-100 border border-amber-100 text-amber-600 transition-all cursor-pointer"
+              title="Customize Login Page Appearance"
+            >
+              <Settings className="w-4 h-4" />
+              Customize Login
+            </button>
+
             {/* Seed Mock Action */}
             <button
               onClick={triggerQuickSeed}
@@ -451,7 +464,7 @@ export default function Home() {
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100">
-                          {filteredAppointments.slice(0, 5).map((appt) => (
+                          {filteredAppointments.slice(0, 5).map((appt: any) => (
                             <tr key={appt.id} className="group hover:bg-slate-50/80 transition-colors">
                               <td className="p-3">
                                 <div className="font-bold text-slate-800">
@@ -551,7 +564,7 @@ export default function Home() {
                     </div>
                   ) : (
                     <div className="space-y-3">
-                      {filteredPatients.slice(0, 4).map((p) => (
+                      {filteredPatients.slice(0, 4).map((p:any ) => (
                         <div
                           key={p.id}
                           className="flex items-center justify-between p-3.5 rounded-xl border border-slate-200 bg-slate-50 hover:border-rose-200 hover:bg-white hover:shadow-sm transition-all group"
@@ -612,7 +625,7 @@ export default function Home() {
                       className="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs focus:outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-100 transition-all text-slate-800 font-medium"
                     >
                       <option value="">-- Select Patient --</option>
-                      {patients.map((p) => (
+                      {patients.map((p:any ) => (
                         <option key={p.id} value={p.id}>
                           [{p.hn}] {p.firstName} {p.lastName}
                         </option>
@@ -705,7 +718,7 @@ export default function Home() {
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-100">
-                        {filteredAppointments.map((appt) => (
+                        {filteredAppointments.map((appt:any ) => (
                           <tr key={appt.id} className="hover:bg-slate-50/80 transition-colors">
                             <td className="p-3">
                               <div className="font-bold text-xs text-rose-500 font-mono">{appt.patient?.hn}</div>
@@ -794,6 +807,16 @@ export default function Home() {
           {/* Section: Service Tab */}
           {activeTab === 'service' && (
             <ServiceTab />
+          )}
+
+          {/* Section: Admin Tab */}
+          {activeTab === 'admin' && (
+            <AdminTab />
+          )}
+
+          {/* Section: Login Config Tab */}
+          {activeTab === 'loginConfig' && (
+            <LoginConfigTab />
           )}
         </div>
       </main>
