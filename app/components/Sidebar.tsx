@@ -18,7 +18,7 @@ export default function Sidebar({ activeTab, onTabChange }: SidebarProps) {
           </div>
           <div>
             <h1 className="font-bold text-lg leading-tight tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-rose-500 to-amber-00">
-              AURA
+              AURAA
             </h1>
             <p className="text-[10px] text-slate-400 uppercase tracking-widest font-bold">
               Clinic Manager
